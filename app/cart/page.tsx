@@ -65,16 +65,23 @@ export default function CartPage() {
     )
     .join("%0A");
 
-  const message = `🛒 *New Order* %0A
-Name: ${name} %0A
-Phone: ${phone} %0A
-Address: ${address} %0A
--------------------- %0A
-${items} %0A
--------------------- %0A
-Total: Rs ${total}`;
+  const message = `🛒 *New Order*
 
-  const phoneNumber = "923XXXXXXXXX";
+👤 Name: ${name}
+📞 Phone: ${phone}
+📍 Address: ${address}
+
+📦 Order Details:
+${cart
+  .map(
+    (item) =>
+      `• ${item.name} (x${item.quantity}) - Rs ${item.price * item.quantity}`
+  )
+  .join("\n")}
+
+💰 Total: Rs ${total}`;
+
+  const phoneNumber = "923179606923";
 
   window.open(`https://wa.me/${phoneNumber}?text=${message}`, "_blank");
 
@@ -94,7 +101,13 @@ Total: Rs ${total}`;
       <h1 className="text-2xl font-bold mb-6">Your Cart</h1>
 
       {cart.length === 0 ? (
-        <p>Your cart is empty</p>
+       <div className="text-center mt-10">
+  <p className="text-gray-500">🛒 Your cart is empty</p>
+
+  <a href="/" className="mt-4 inline-block text-blue-600 underline">
+    Go Shopping
+  </a>
+</div>
       ) : (
         <div className="space-y-4">
 
@@ -147,6 +160,22 @@ Total: Rs ${total}`;
             Total: Rs {total.toLocaleString()}
           </div>
           <div className="mt-6 space-y-3">
+            <div className="mt-6 bg-gray-100 p-4 rounded">
+
+  <h2 className="font-semibold mb-2">Order Summary</h2>
+
+  {cart.map((item) => (
+    <div key={item.id} className="flex justify-between text-sm">
+      <span>{item.name} x{item.quantity}</span>
+      <span>Rs {item.price * item.quantity}</span>
+    </div>
+  ))}
+
+  <div className="border-t mt-2 pt-2 font-bold">
+    Total: Rs {total.toLocaleString()}
+  </div>
+
+</div>
 
   <input
     type="text"
@@ -175,7 +204,12 @@ Total: Rs ${total}`;
 
          <button
   onClick={handleWhatsAppOrder}
-  className="mt-4 w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded font-semibold"
+  disabled={cart.length === 0}
+  className={`mt-4 w-full py-3 rounded font-semibold ${
+    cart.length === 0
+      ? "bg-gray-400"
+      : "bg-green-600 hover:bg-green-700 text-white"
+  }`}
 >
   Order on WhatsApp
 </button>
