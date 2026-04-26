@@ -9,9 +9,9 @@ export default function AddToCartButton({ product }: any) {
     <button
       onClick={() => {
         addToCart(product);
-       console.log("Added to cart");
+       window.dispatchEvent(new Event("cartUpdated"));
       }}
-      className="w-full border border-black py-3 rounded mt-3"
+     className="bg-[var(--primary)] hover:bg-green-700 text-white py-3 rounded"
     >
       Add to Cart
     </button>

@@ -1,53 +1,73 @@
+import ProductGallery from "@/components/ProductGallery";
 import AddToCartButton from "@/components/AddToCartButton";
 import { products } from "@/data/products";
-import Navbar from "@/components/Navbar";
+import Reviews from "@/components/Reviews";
 
+export default function ProductPage({ params }: any) {
+  const product = products.find((p: any) => p.id === Number(params.id));
 
-type Props = {
-  params: Promise<{ id: string }>;
-};
-
-export default async function ProductPage({ params }: Props) {
-  const { id } = await params; // ✅ FIX
-
-  const product = products.find(
-    (p) => p.id === Number(id)
-  );
-
-  if (!product) {
-    return <div>Product not found</div>;
-  }
+  if (!product) return <div>Product not found</div>;
 
   return (
-    <main className="p-10 bg-white text-black min-h-screen">
-      <Navbar />
+    <main className="p-6 md:p-10 bg-white min-h-screen">
 
-      <h1 className="text-3xl font-bold">
-        {product.name}
-      </h1>
+      <div className="grid md:grid-cols-2 gap-10">
 
-      <p className="text-green-600 text-xl mt-2">
-        Rs {product.price}
-      </p>
+        {/* LEFT - IMAGES */}
+        <ProductGallery images={product.images} />
 
-      <p className="mt-4">
-        Capacity: {product.capacity}
-      </p>
+        {/* RIGHT - DETAILS */}
+        <div>
 
-      <p>Brand: {product.brand}</p>
+          <h1 className="text-3xl font-bold">
+            {product.name}
+          </h1>
 
-      <p className="mt-4">
-        {product.description}
-      </p>
+          {/* PRICE */}
+          <div className="mt-3">
+            <span className="text-2xl text-green-600 font-bold">
+              Rs {product.price}
+            </span>
 
-      <div className="mt-6 space-y-3">
+            {product.oldPrice && (
+              <span className="ml-3 line-through text-gray-400">
+                Rs {product.oldPrice}
+              </span>
+            )}
+          </div>
 
-        <button className="w-full bg-black text-white py-3 rounded">
-          Buy Now
-        </button>
+          {/* DISCOUNT BADGE */}
+          {product.oldPrice && (
+            <div className="mt-2 inline-block bg-red-500 text-white px-3 py-1 text-sm rounded">
+              SALE
+            </div>
+          )}
 
-        <AddToCartButton product={product} />
+          <p className="mt-4">
+            Capacity: {product.capacity}
+          </p>
 
+          <p>Brand: {product.brand}</p>
+
+          <p className="mt-4 text-gray-600">
+            {product.description}
+          </p>
+
+          {/* BUTTONS */}
+          <div className="mt-6 space-y-3">
+
+            <button className="w-full bg-black text-white py-3 rounded">
+              Buy Now
+            </button>
+
+            <AddToCartButton product={product} />
+
+            <Reviews productId={product.id} />
+
+          </div>
+          
+
+        </div>
       </div>
 
     </main>

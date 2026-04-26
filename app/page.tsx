@@ -1,6 +1,9 @@
 import ProductCard from "@/components/ProductCard";
 import { products } from "@/data/products";
 import Navbar from "@/components/Navbar";
+
+
+
 export default function Home() {
   return (
     <main className="min-h-screen bg-gray-50">
@@ -19,18 +22,19 @@ export default function Home() {
       </header>
 
       {/* HERO SECTION */}
-      <section className="bg-green-600 text-white p-12 text-center">
-        <h1 className="text-4xl font-bold">
-          Premium Solar Batteries in Pakistan
-        </h1>
-        <p className="mt-2">
-          Long Backup • Warranty • Cash on Delivery
-        </p>
+      <section className="bg-gradient-to-r from-green-600 to-green-500 text-white text-center py-16">
+  <h1 className="text-4xl font-bold">
+    Premium Solar Batteries in Pakistan
+  </h1>
 
-        <button className="mt-6 bg-black px-6 py-2 rounded">
-          Shop Now
-        </button>
-      </section>
+  <p className="mt-2 text-sm">
+    Long Backup • Warranty • Cash on Delivery
+  </p>
+
+  <button className="mt-6 bg-black px-6 py-2 rounded">
+    Shop Now
+  </button>
+</section>
 
       {/* CATEGORIES */}
       <section className="p-6">
@@ -62,11 +66,11 @@ export default function Home() {
     Featured Products
   </h2>
 
-  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-    {products.map((product) => (
-      <ProductCard key={product.id} product={product} />
-    ))}
-  </div>
+  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-4">
+  {products.map((product) => (
+    <ProductCard key={product.id} product={product} />
+  ))}
+</div>
 </section>
 
     </main>

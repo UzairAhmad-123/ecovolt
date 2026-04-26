@@ -175,7 +175,9 @@ ${cart
     Total: Rs {total.toLocaleString()}
   </div>
 
-</div>
+</div>  
+
+<div className="mt-6 space-y-3"></div>
 
   <input
     type="text"

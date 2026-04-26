@@ -10,24 +10,26 @@ export const saveCart = (cart: any[]) => {
 };
 
 export const addToCart = (product: any) => {
-  const cart = getCart();
+  const existing = JSON.parse(localStorage.getItem("cart") || "[]");
 
-  const index = cart.findIndex((item: any) => item.id === product.id);
+  const index = existing.findIndex(
+    (item: any) => item.id === product.id
+  );
 
   if (index !== -1) {
-    cart[index].quantity += 1;
+    existing[index].quantity += 1;
   } else {
-    cart.push({
-      id: product.id,
-      name: product.name,
-      price: product.price,
+    existing.push({
+      ...product,
       quantity: 1,
     });
   }
 
-  saveCart(cart);
-};
+  localStorage.setItem("cart", JSON.stringify(existing));
 
+  // ✅ IMPORTANT
+  window.dispatchEvent(new Event("cartUpdated"));
+};
 export const removeFromCart = (id: number) => {
   const cart = getCart().filter((item: any) => item.id !== id);
   saveCart(cart);

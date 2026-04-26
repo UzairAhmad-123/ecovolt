@@ -1,12 +1,34 @@
 export const products = [
   {
     id: 1,
-    name: "Phoenix Battery 200Ah",
-    price: 52000,
+    name: "Ecovolt Lithium Battery 100Ah",
+    price: 220000,
+    oldPrice: 250000,
+    capacity: "100Ah",
+    brand: "Ecovolt",
+    description: "High performance lithium battery with 8000 cycles.",
+    images: ["/battery1.jpg"],
+  },
+
+  {
+    id: 2,
+    name: "Ecovolt Lithium Battery 100Ah",
+    price:  220000,
+    oldPrice:  250000,
+    capacity: "100Ah",
+    brand: "Ecovolt",
+    description: "Durable tubular battery for long backup.",
+    images: ["/battery2.jpg"],
+  },
+
+  {
+    id: 3,
+    name: "Ecovolt Lithium Battery 100Ah",
+    price:  220000,
+    oldPrice:  250000,
     capacity: "200Ah",
-    brand: "Phoenix",
-    warranty: "1 Year",
-    description: "High performance solar battery with long backup time.",
-    image: "/battery1.jpg",
+    brand: "Ecovolt",
+    description: "Heavy-duty solar battery for home systems.",
+    images: ["/battery3.jpg"],
   },
 ];
