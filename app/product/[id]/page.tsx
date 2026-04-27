@@ -1,10 +1,31 @@
+
 import ProductGallery from "@/components/ProductGallery";
 import AddToCartButton from "@/components/AddToCartButton";
 import { products } from "@/data/products";
 import Reviews from "@/components/Reviews";
 
-export default function ProductPage({ params }: any) {
-  const product = products.find((p: any) => p.id === Number(params.id));
+export default async function ProductPage({ params }: any) {
+  const resolvedParams = await params;
+
+  const product = products.find(
+    (p: any) => p.id === Number(resolvedParams.id)
+  );
+
+  function getRating(productId: number) {
+  if (typeof window === "undefined") return { avg: 0, count: 0 };
+
+  const stored = JSON.parse(
+    localStorage.getItem(`reviews_${productId}`) || "[]"
+  );
+
+  if (stored.length === 0) return { avg: 0, count: 0 };
+
+  const total = stored.reduce((sum: number, r: any) => sum + r.rating, 0);
+  return {
+    avg: total / stored.length,
+    count: stored.length,
+  };
+}
 
   if (!product) return <div>Product not found</div>;
 
@@ -13,62 +34,26 @@ export default function ProductPage({ params }: any) {
 
       <div className="grid md:grid-cols-2 gap-10">
 
-        {/* LEFT - IMAGES */}
         <ProductGallery images={product.images} />
 
-        {/* RIGHT - DETAILS */}
         <div>
+          <h1 className="text-3xl font-bold">{product.name}</h1>
 
-          <h1 className="text-3xl font-bold">
-            {product.name}
-          </h1>
-
-          {/* PRICE */}
-          <div className="mt-3">
-            <span className="text-2xl text-green-600 font-bold">
-              Rs {product.price}
-            </span>
-
-            {product.oldPrice && (
-              <span className="ml-3 line-through text-gray-400">
-                Rs {product.oldPrice}
-              </span>
-            )}
-          </div>
-
-          {/* DISCOUNT BADGE */}
-          {product.oldPrice && (
-            <div className="mt-2 inline-block bg-red-500 text-white px-3 py-1 text-sm rounded">
-              SALE
-            </div>
-          )}
-
-          <p className="mt-4">
-            Capacity: {product.capacity}
+          <p className="text-2xl text-green-600">
+            Rs {product.price}
           </p>
 
-          <p>Brand: {product.brand}</p>
-
-          <p className="mt-4 text-gray-600">
-            {product.description}
-          </p>
-
-          {/* BUTTONS */}
-          <div className="mt-6 space-y-3">
-
-            <button className="w-full bg-black text-white py-3 rounded">
-              Buy Now
-            </button>
-
-            <AddToCartButton product={product} />
-
-            <Reviews productId={product.id} />
-
-          </div>
-          
-
+          <AddToCartButton product={product} />
         </div>
+
       </div>
+
+      {/* ✅ NOW THIS WILL SHOW */}
+      <div className="mt-12 bg-yellow-100 p-6">
+        TEST REVIEWS SECTION
+      </div>
+
+      <Reviews productId={product.id} />
 
     </main>
   );

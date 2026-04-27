@@ -51,6 +51,7 @@ export default function Reviews({ productId }: any) {
 
       {/* ADD REVIEW */}
       <div className="bg-gray-100 p-4 rounded space-y-3">
+        <div className="mt-12 bg-yellow-100 p-6 border"></div>
 
         <input
           type="text"
@@ -70,6 +71,7 @@ export default function Reviews({ productId }: any) {
           <option value={3}>⭐⭐⭐</option>
           <option value={2}>⭐⭐</option>
           <option value={1}>⭐</option>
+          
         </select>
 
         <textarea
@@ -101,9 +103,10 @@ export default function Reviews({ productId }: any) {
 
               <p className="font-semibold">{r.name}</p>
 
-              <p className="text-yellow-500">
-                {"⭐".repeat(r.rating)}
-              </p>
+             <p className="text-yellow-500">
+  {"⭐".repeat(Number(r.rating) || 0)}
+  
+</p>
 
               <p className="text-gray-600 mt-1">
                 {r.comment}
