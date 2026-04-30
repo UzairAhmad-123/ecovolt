@@ -43,6 +43,13 @@ export default function Navbar() {
           <Link href="/">Home</Link>
 
           <div className="relative w-1/3">
+          <Link href="/admin">Admin</Link>
+
+          <a href="/checkout">
+  <button className="bg-green-600 text-white px-4 py-2">
+    Checkout
+  </button>
+</a>
   <input
     type="text"
     placeholder="Search batteries..."
@@ -63,7 +70,7 @@ export default function Navbar() {
 
       {filtered.map((p: any) => (
         <Link
-          key={p.id}
+          key={p._id}
           href={`/product/${p.id}`}
           onClick={() => setQuery("")}
         >
