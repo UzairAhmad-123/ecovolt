@@ -11,6 +11,14 @@ export default function OrdersPage() {
       .then(setOrders);
   }, []);
 
+  useEffect(() => {
+  const isAdmin = localStorage.getItem("admin");
+
+  if (!isAdmin) {
+    window.location.href = "/admin/login";
+  }
+}, []);
+
   const updateStatus = async (id: string, status: string) => {
   await fetch(`/api/orders/${id}`, {
     method: "PATCH",

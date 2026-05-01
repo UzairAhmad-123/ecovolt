@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 
+
 export default function AdminPage() {
   const [products, setProducts] = useState<any[]>([]);
   const [name, setName] = useState("");
@@ -23,7 +24,13 @@ export default function AdminPage() {
 
   fetchProducts();
 }, []);
-  
+  useEffect(() => {
+  const isAdmin = localStorage.getItem("admin");
+
+  if (!isAdmin) {
+    window.location.href = "/admin/login";
+  }
+}, []);
 
   // ADD OR UPDATE
  const handleSubmit = async () => {
@@ -163,6 +170,16 @@ export default function AdminPage() {
               >
                 Delete
               </button>
+
+              <button
+  onClick={() => {
+    localStorage.removeItem("admin");
+    window.location.href = "/admin/login";
+  }}
+  className="bg-red-500 text-white px-3 py-1"
+>
+  Logout
+</button>
             </div>
           </div>
         ))}
