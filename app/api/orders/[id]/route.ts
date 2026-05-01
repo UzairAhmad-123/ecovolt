@@ -4,16 +4,40 @@ import { NextResponse } from "next/server";
 
 export async function GET(
   req: Request,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: { id: string } }
 ) {
-  const { id } = await params;
+  try {
+    const id = params.id;
 
-  const client = await clientPromise;
-  const db = client.db("myshop");
+    if (!id) {
+      return NextResponse.json(
+        { error: "No ID" },
+        { status: 400 }
+      );
+    }
 
-  const order = await db
-    .collection("orders")
-    .findOne({ _id: new ObjectId(id) });
+    const client = await clientPromise;
+    const db = client.db("myshop");
 
-  return NextResponse.json(order || {});
+    const order = await db.collection("orders").findOne({
+      _id: new ObjectId(id),
+    });
+
+    if (!order) {
+      return NextResponse.json(
+        { error: "Order not found" },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json(order);
+
+  } catch (error) {
+    console.error(error);
+
+    return NextResponse.json(
+      { error: "Server error" },
+      { status: 500 }
+    );
+  }
 }
