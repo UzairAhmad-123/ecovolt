@@ -6,7 +6,7 @@ export async function GET() {
 
   // 👉 Add ONE product
   await db.collection("products").insertOne({
-    name: "Solar Battery",
+    name: "EcoVolt Battery",
     price: 150000,
     category: "battery",
     image: "/battery.jpg",

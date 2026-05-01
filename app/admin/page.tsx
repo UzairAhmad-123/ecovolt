@@ -2,85 +2,97 @@
 
 import { useState, useEffect } from "react";
 
-
 export default function AdminPage() {
   const [products, setProducts] = useState<any[]>([]);
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [category, setCategory] = useState("battery");
   const [image, setImage] = useState("");
-
   const [editId, setEditId] = useState<string | null>(null);
 
-  // LOAD
- 
-
+  // ✅ Check admin login
   useEffect(() => {
-  const fetchProducts = async () => {
-    const res = await fetch("/api/test");
+    const isAdmin = localStorage.getItem("admin");
+
+    if (!isAdmin) {
+      window.location.href = "/admin/login";
+    }
+  }, []);
+
+  // ✅ Load products
+  const loadProducts = async () => {
+   const res = await fetch(`/api/products`); 
     const data = await res.json();
-    setProducts(data);
+    setProducts(Array.isArray(data) ? data : []);
   };
 
-  fetchProducts();
-}, []);
   useEffect(() => {
-  const isAdmin = localStorage.getItem("admin");
+    loadProducts();
+  }, []);
 
-  if (!isAdmin) {
-    window.location.href = "/admin/login";
-  }
-}, []);
+  // ✅ ADD or UPDATE
+  const handleSubmit = async () => {
+    if (!name || !price) {
+      alert("Fill all fields");
+      return;
+    }
 
-  // ADD OR UPDATE
- const handleSubmit = async () => {
-  if (!name || !price) {
-    alert("Fill all fields");
-    return;
-  }
-
-  await fetch("/api/products", {
-    method: "POST",
-    body: JSON.stringify({
+    const body = {
       name,
       price: Number(price),
       category,
       image: image || "/battery1.jpg",
-    }),
-  });
+    };
 
-  alert("Product Added!");
+    if (editId) {
+      // 🔄 UPDATE
+      await fetch(`/api/products/${editId}`, {
+        method: "PUT",
+        body: JSON.stringify(body),
+      });
 
-  // reload products
-  const res = await fetch("/api/test");
-  const data = await res.json();
-  setProducts(data);
+      alert("Product Updated!");
+      setEditId(null);
+    } else {
+      // ➕ ADD
+      await fetch("/api/products", {
+        method: "POST",
+        body: JSON.stringify(body),
+      });
 
-  setName("");
-  setPrice("");
-  setImage("");
-};
+      alert("Product Added!");
+    }
 
-  // DELETE
- const deleteProduct = async (id: string) => {
-  if (!id) return; // safety
+    // 🔄 reload
+    await loadProducts();
 
-  await fetch(`/api/products/${id}`, {
-    method: "DELETE",
-  });
+    // 🔄 reset
+    setName("");
+    setPrice("");
+    setImage("");
+  };
 
-  setProducts(products.filter((p) => p._id !== id));
-};
-  // EDIT
+  // ❌ DELETE
+  const deleteProduct = async (id: string) => {
+    if (!id) return;
+
+    await fetch(`/api/products/${id}`, {
+      method: "DELETE",
+    });
+
+    setProducts(products.filter((p) => p._id !== id));
+  };
+
+  // ✏️ EDIT
   const editProduct = (p: any) => {
-    setEditId(p.id);
+    setEditId(p._id);
     setName(p.name);
     setPrice(p.price);
     setCategory(p.category);
-    setImage(p.images?.[0] || "");
+    setImage(p.image || "");
   };
 
-  // IMAGE UPLOAD
+  // 🖼 IMAGE UPLOAD
   const handleImage = (e: any) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -94,14 +106,10 @@ export default function AdminPage() {
 
   return (
     <main className="p-6 max-w-xl mx-auto">
-
-      <h1 className="text-2xl font-bold mb-6">
-        Admin Panel
-      </h1>
+      <h1 className="text-2xl font-bold mb-6">Admin Panel</h1>
 
       {/* FORM */}
       <div className="space-y-3">
-
         <input
           placeholder="Product Name"
           value={name}
@@ -130,7 +138,7 @@ export default function AdminPage() {
         <input type="file" onChange={handleImage} />
 
         {image && (
-          <img src={image} className="w-24 h-24 object-cover" />
+          <img src={image} className="w-24 h-24 object-cover rounded" />
         )}
 
         <button
@@ -139,7 +147,6 @@ export default function AdminPage() {
         >
           {editId ? "Update Product" : "Add Product"}
         </button>
-
       </div>
 
       {/* LIST */}
@@ -165,26 +172,26 @@ export default function AdminPage() {
               </button>
 
               <button
-                onClick={() => deleteProduct(p.id)}
+                onClick={() => deleteProduct(p._id)}
                 className="px-2 py-1 bg-red-500 text-white text-sm"
               >
                 Delete
               </button>
-
-              <button
-  onClick={() => {
-    localStorage.removeItem("admin");
-    window.location.href = "/admin/login";
-  }}
-  className="bg-red-500 text-white px-3 py-1"
->
-  Logout
-</button>
             </div>
           </div>
         ))}
-      </div>
 
+        {/* LOGOUT */}
+        <button
+          onClick={() => {
+            localStorage.removeItem("admin");
+            window.location.href = "/admin/login";
+          }}
+          className="mt-4 w-full bg-red-500 text-white py-2"
+        >
+          Logout
+        </button>
+      </div>
     </main>
   );
 }

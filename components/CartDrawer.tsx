@@ -47,45 +47,37 @@ export default function CartDrawer({ open, onClose }: any) {
           {cart.length === 0 ? (
             <p>Your cart is empty</p>
           ) : (
-            cart.map((item) => (
-              <div
-                key={item.id}
-                className="border p-3 rounded"
-              >
-                <h3 className="font-semibold">{item.name}</h3>
+           cart.map((item, index) => (
+  <div
+    key={`${item.id}-${index}`}
+    className="border p-3 rounded"
+  >
+    <h3 className="font-semibold">{item.name}</h3>
 
-                <div className="flex items-center gap-2 mt-2">
-                  <button
-                    onClick={() =>
-                      updateQuantity(item.id, "dec")
-                    }
-                  >
-                    -
-                  </button>
+    <div className="flex items-center gap-2 mt-2">
+      <button onClick={() => updateQuantity(item.id, "dec")}>
+        -
+      </button>
 
-                  <span>{item.quantity}</span>
+      <span>{item.quantity}</span>
 
-                  <button
-                    onClick={() =>
-                      updateQuantity(item.id, "inc")
-                    }
-                  >
-                    +
-                  </button>
-                </div>
+      <button onClick={() => updateQuantity(item.id, "inc")}>
+        +
+      </button>
+    </div>
 
-                <p className="mt-1">
-                  Rs {item.price * item.quantity}
-                </p>
+    <p className="mt-1">
+      Rs {item.price * item.quantity}
+    </p>
 
-                <button
-                  onClick={() => removeFromCart(item.id)}
-                  className="text-red-500 text-sm mt-1"
-                >
-                  Remove
-                </button>
-              </div>
-            ))
+    <button
+      onClick={() => removeFromCart(item.id)}
+      className="text-red-500 text-sm mt-1"
+    >
+      Remove
+    </button>
+  </div>
+))
           )}
         </div>
 

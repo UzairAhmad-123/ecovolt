@@ -111,11 +111,11 @@ ${cart
       ) : (
         <div className="space-y-4">
 
-          {cart.map((item) => (
-            <div
-              key={item.id}
-              className="flex justify-between items-center bg-white p-4 shadow rounded"
-            >
+          {cart.map((item, index) => (
+  <div
+    key={`${item.id || item._id}-${index}`}
+    className="flex justify-between items-center bg-white p-4 shadow rounded"
+  >
               <div>
                 <h2 className="font-semibold">{item.name}</h2>
 
@@ -164,12 +164,15 @@ ${cart
 
   <h2 className="font-semibold mb-2">Order Summary</h2>
 
-  {cart.map((item) => (
-    <div key={item.id} className="flex justify-between text-sm">
-      <span>{item.name} x{item.quantity}</span>
-      <span>Rs {item.price * item.quantity}</span>
-    </div>
-  ))}
+  {cart.map((item, index) => (
+  <div
+    key={`${item.id || item._id}-${index}`}
+    className="flex justify-between text-sm"
+  >
+    <span>{item.name} x{item.quantity}</span>
+    <span>Rs {item.price * item.quantity}</span>
+  </div>
+))}
 
   <div className="border-t mt-2 pt-2 font-bold">
     Total: Rs {total.toLocaleString()}

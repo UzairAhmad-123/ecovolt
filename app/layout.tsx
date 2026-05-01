@@ -15,9 +15,9 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "Ecovolt Store",
-  description: "Solar batteries in Pakistan",
+export const metadata = {
+  title: "EcoVolt ⚡",
+  description: "EcoVolt Solar Batteries Store",
 };
 
 export default function RootLayout({
